@@ -1,6 +1,8 @@
 # Introduction 
 Demo server implementation of verifying the OAuthInfo object from the C4C Mashup API. 
 
+This is a minimal re-implementation of the AuthInfo processor from the example repo https://github.com/zhuming/c4c_mashup_oauth_sample
+
 # Getting Started
 ```
 npm install

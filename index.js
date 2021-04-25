@@ -9,7 +9,7 @@ const port = 4444
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded())
 
-// This CA cert is hardcoded in SAP's example code, but it does not verify with the public key we receive from C4C
+// This CA cert is hardcoded in the example repo code, but it does not verify with the public key we receive from C4C
 // TODO: Request the proper CA from SAP
 const DO_VERIFY_CA = false
 const CA_CERT = "-----BEGIN CERTIFICATE-----\n" + "MIICZjCCAc+gAwIBAgIECAAAATANBgkqhkiG9w0BAQUFADBFMQswCQYDVQQGEwJE\n"
