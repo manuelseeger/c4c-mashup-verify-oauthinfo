@@ -1,0 +1,73 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript">
+
+async function processOAuthInfo() {
+
+    var sAuthInfo;
+	try{
+		sAuthInfo = sap.byd.ui.mashup.context.system.OAuthInfo;
+	}catch(error){
+        console.log('Mashup API not available');
+		sAuthInfo = '';
+	}
+	var oOAuthInfo = JSON.parse(sAuthInfo);
+    console.log(oOAuthInfo);
+	var payload = JSON.stringify(oOAuthInfo.OAuthInfo || {});
+    console.log(payload);
+	var signature = oOAuthInfo.signature || '';
+    console.log(signature);
+
+    var url = 'https://7e8933d6cb7e.ngrok.io/verify';
+    
+  	let response = await axios.post(url, { payload: sap.byd.ui.mashup.context.system.OAuthInfo }
+  );
+  
+    console.log(response.data)
+  
+    document.getElementById('results').innerHTML = JSON.stringify(response.data);
+  
+
+}
+ 
+  
+function serviceCallback(data) {
+
+  console.log("success");
+  console.log(data);
+  try {
+    result = JSON.parse(data);
+    console.log(result);
+  } catch (e) {
+  }
+  
+  d = document.getElementById("results");
+  d.innerHTML = data;
+}
+function serviceErrorHandler(data) {
+
+  console.log("error");
+  console.log(data);
+  d = document.getElementById("results");
+  d.innerHTML = data;
+}
+  
+function callService() {
+  sap.byd.ui.mashup.callService({
+    serviceId: 'CW00013',
+    parameter: {
+      payload: sap.byd.ui.mashup.context.system.OAuthInfo
+    },
+    onComplete:'serviceCallback',
+    onError: 'serviceErrorHandler'
+ });
+}
+  
+</script>
+<button onclick="processOAuthInfo();">processOAuthInfo</button>
+<br/><br/>
+
+
+<button onclick="callService();">Call Service</button>
+<br/><br/>
+<code id="results"></code>
