@@ -19,6 +19,7 @@ C4C send the InfoObject from the mashup API to the server through a C4C server s
 
 Auth options for the receiver: Basic (OAuth 1.0 available according to documentation but unclear how it is supposed to work). 
 
+To validate the C4C public key get the SAP CA cert from https://support.sap.com/en/offerings-programs/support-services/trust-center-services.html (download at the bottom, 'SAP Passport CA G2')
 
 ## Example request
 Requests from C4C look like this (example without Basic auth):

@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const crypto = require('crypto')
 const pki = require('node-forge').pki
+const fs = require('fs')
 
 const app = express()
 const port = 4444
@@ -9,29 +10,17 @@ const port = 4444
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded())
 
-// This CA cert is hardcoded in the example repo code, but it does not verify with the public key we receive from C4C
-// TODO: Request the proper CA from SAP
-const DO_VERIFY_CA = false
-const CA_CERT = "-----BEGIN CERTIFICATE-----\n" + "MIICZjCCAc+gAwIBAgIECAAAATANBgkqhkiG9w0BAQUFADBFMQswCQYDVQQGEwJE\n"
-  + "RTEcMBoGA1UEChMTU0FQIFRydXN0IENvbW11bml0eTEYMBYGA1UEAxMPU0FQIFBh\n"
-  + "c3Nwb3J0IENBMB4XDTAwMDcxODEwMDAwMFoXDTIxMDQwMTEwMDAwMFowRTELMAkG\n"
-  + "A1UEBhMCREUxHDAaBgNVBAoTE1NBUCBUcnVzdCBDb21tdW5pdHkxGDAWBgNVBAMT\n"
-  + "D1NBUCBQYXNzcG9ydCBDQTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA/2rT\n"
-  + "TxBHa450XQCJ/ENotmAwKpFdyKWdU7KC4p8X0VEz/DB4Zu5Digq91f9wxsAYyvbh\n"
-  + "hvoZ5nZimr1sFiWw60gCryDI2qINowZX/sWmYGqguVyBrTxjjEwnAYQXno53RFR5\n"
-  + "p0Aa9RLfLNSITWeHeELKT5ahpGckGdrh4R6+vSMCAwEAAaNjMGEwDwYDVR0TAQH/\n"
-  + "BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAfYwHQYDVR0OBBYEFBpERaZXcXBWARx4JHpR\n"
-  + "NkzANdBeMB8GA1UdIwQYMBaAFBpERaZXcXBWARx4JHpRNkzANdBeMA0GCSqGSIb3\n"
-  + "DQEBBQUAA4GBACwoEOHrYBA0pt7ClKyLfO2o2aJ1DyGCkzrM7RhStTE1yfCpiagc\n"
-  + "XUYu4yCM1i7jPnAWkpMe1NhpwEEbiKPAa3jLJ7iIXN3e/qZG0HAyPOQS3KdAQsiC\n"
-  + "bL9ysfX0LqKir68z0Tv0SYtJTMnPfkCtGXt+D75wWSY7dyI0Xu7Yl9kH\n" + "-----END CERTIFICATE-----"
+// get the SAP CA cert from https://support.sap.com/en/offerings-programs/support-services/trust-center-services.html
+const DO_VERIFY_CA = true
+const CA_CERT_G2 = fs.readFileSync('SAPPassportCA.pem', 'utf8')
 
 function isCertIssuedByCa(certPem) {
 
-  const ca = pki.certificateFromPem(CA_CERT)
+  const ca = pki.certificateFromPem(CA_CERT_G2)
   const cert = pki.certificateFromPem(certPem)
 
   try {
+    console.log('Verified public key with CA', ca.issuer.getField('CN'))
     return ca.verify(cert)
   } catch (e) {
     console.log(e)
