@@ -22,7 +22,7 @@ Auth options for the receiver: Basic (OAuth 1.0 available according to documenta
 To validate the C4C public key get the SAP CA cert from https://support.sap.com/en/offerings-programs/support-services/trust-center-services.html (download at the bottom, 'SAP Passport CA G2')
 
 ## Example request
-Requests from C4C look like this (example without Basic auth):
+Requests from C4C look like this (example without Basic auth, replace Host / path with your server):
 ```
 POST /verify HTTP/1.1
 Host: 9fad682e42da.ngrok.io
