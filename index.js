@@ -20,8 +20,11 @@ function isCertIssuedByCa(certPem) {
   const cert = pki.certificateFromPem(certPem)
 
   try {
-    console.log('Verified public key with CA', ca.issuer.getField('CN'))
-    return ca.verify(cert)
+    let verified = ca.verify(cert)
+    if (verified) {
+      console.log('Verified public key with CA', ca.issuer.getField('CN'))
+    }
+    return verified
   } catch (e) {
     console.log(e)
     return false;
